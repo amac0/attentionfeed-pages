@@ -114,6 +114,48 @@ ul, ol {
   margin-top: 0;
 }
 
+/* Header nav links — light DOM styles so they override the base `a` rule */
+af-header a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: white;
+  text-decoration: none;
+  padding: var(--space-2) 0 var(--space-2) var(--space-4);
+  display: inline-block;
+}
+
+af-header a:hover {
+  text-decoration: none;
+}
+
+af-header a.active {
+  position: relative;
+}
+
+af-header a.active::before {
+  content: '';
+  position: absolute;
+  top: 0.35em;
+  left: var(--space-4);
+  right: 0.12em;
+  height: 2px;
+  background: white;
+}
+
+@media (max-width: 768px) {
+  af-header a {
+    color: var(--color-primary);
+    padding: var(--space-1) var(--space-4);
+  }
+
+  af-header a.active::before {
+    display: none;
+  }
+}
+
 /* Images */
 img {
   max-width: 100%;

@@ -249,7 +249,7 @@ class AFHeader extends HTMLElement {
 
 class AFFooter extends HTMLElement {
   static get observedAttributes() {
-    return ['base-url'];
+    return ['base-url', 'colophon-url'];
   }
 
   constructor() {
@@ -272,8 +272,12 @@ class AFFooter extends HTMLElement {
       .replace(/\/$/, '');
   }
 
+  get colophonUrl() {
+    return this.getAttribute('colophon-url') || `${this.baseUrl}/colophon`;
+  }
+
   render() {
-    const base = this.baseUrl;
+    const colophonUrl = this.colophonUrl;
     const year = new Date().getFullYear();
 
     this.shadowRoot.innerHTML = `
@@ -347,7 +351,7 @@ class AFFooter extends HTMLElement {
         <div class="footer-inner">
           <span class="footer-name">attention feed</span>
           <span class="footer-links">
-            <a href="${base}/colophon">Colophon</a>
+            <a href="${colophonUrl}">Colophon</a>
             <span class="separator">/</span>
             <span>${year}</span>
           </span>

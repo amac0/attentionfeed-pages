@@ -3,7 +3,7 @@
 
 class AFHeader extends HTMLElement {
   static get observedAttributes() {
-    return ['active-tab', 'base-url'];
+    return ['base-url', 'project-name', 'project-url'];
   }
 
   constructor() {
@@ -28,27 +28,27 @@ class AFHeader extends HTMLElement {
       .replace(/\/$/, '');
   }
 
-  get activeTab() {
-    return this.getAttribute('active-tab') || 'projects';
+  get projectName() {
+    return this.getAttribute('project-name') || '';
+  }
+
+  get projectUrl() {
+    return this.getAttribute('project-url') || '';
   }
 
   render() {
     const base = this.baseUrl;
-    const active = this.activeTab;
+    const projectName = this.projectName;
+    const projectUrl = this.projectUrl;
 
-    const tabs = [
-      { id: 'projects', label: 'Projects', href: `${base}/` },
-      { id: 'blog', label: 'Blog', href: `${base}/blog` },
-      { id: 'about', label: 'About', href: `${base}/about` },
-    ];
-
-    const activeLabel = tabs.find(t => t.id === active)?.label || 'Projects';
-
-    const navLinks = tabs.map(tab => {
-      const classes = 'nav-link' + (tab.id === active ? ' active' : '');
-      const ariaCurrent = tab.id === active ? ' aria-current="page"' : '';
-      return `<li><a href="${tab.href}" class="${classes}"${ariaCurrent}>${tab.label}</a></li>`;
-    }).join('');
+    /* Build the title: "attention feed" alone, or "attention feed: ProjectName" */
+    let titleHtml = `<a href="${base}/" class="site-title-brand">attention feed</a>`;
+    if (projectName) {
+      const nameHtml = projectUrl
+        ? `<a href="${projectUrl}" class="site-title-project">${projectName}</a>`
+        : `<span class="site-title-project">${projectName}</span>`;
+      titleHtml += `<span class="site-title-separator">:</span>${nameHtml}`;
+    }
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -94,6 +94,14 @@ class AFHeader extends HTMLElement {
         }
 
         .site-title {
+          display: flex;
+          align-items: baseline;
+          gap: 0;
+          line-height: 1;
+        }
+
+        .site-title-brand,
+        .site-title-project {
           font-family: 'Baloo 2', cursive;
           font-weight: 700;
           font-size: var(--text-3xl);
@@ -103,19 +111,30 @@ class AFHeader extends HTMLElement {
           line-height: 1;
         }
 
-        .site-title:hover {
+        .site-title-brand:hover,
+        .site-title-project:hover {
           text-decoration: none;
+          opacity: 0.85;
         }
 
-        .nav-menu {
-          list-style: none;
+        .site-title-separator {
+          font-family: 'Baloo 2', cursive;
+          font-weight: 700;
+          font-size: var(--text-3xl);
+          color: white;
+          opacity: 0.5;
+          margin: 0 0.15em;
+          line-height: 1;
+        }
+
+        /* Slotted nav links (light DOM) */
+        .nav-area {
           display: flex;
+          align-items: baseline;
           gap: 0;
-          padding: 0;
-          margin: 0;
         }
 
-        .nav-link {
+        ::slotted(a) {
           font-family: 'IBM Plex Mono', monospace;
           font-weight: 700;
           font-size: var(--text-sm);
@@ -128,24 +147,9 @@ class AFHeader extends HTMLElement {
           display: inline-block;
         }
 
-        .nav-link:hover {
+        ::slotted(a:hover) {
           opacity: 1;
           text-decoration: none;
-        }
-
-        .nav-link.active {
-          opacity: 1;
-          position: relative;
-        }
-
-        .nav-link.active::before {
-          content: '';
-          position: absolute;
-          top: 0.35em;
-          left: var(--space-4);
-          right: 0.12em;
-          height: 2px;
-          background: white;
         }
 
         .nav-toggle {
@@ -170,7 +174,9 @@ class AFHeader extends HTMLElement {
             position: relative;
           }
 
-          .site-title {
+          .site-title-brand,
+          .site-title-project,
+          .site-title-separator {
             font-size: var(--text-2xl);
           }
 
@@ -178,7 +184,7 @@ class AFHeader extends HTMLElement {
             display: flex;
           }
 
-          .nav-menu {
+          .nav-area {
             display: none;
             position: absolute;
             top: 100%;
@@ -191,20 +197,13 @@ class AFHeader extends HTMLElement {
             background-color: var(--color-bg);
           }
 
-          .nav-link {
+          ::slotted(a) {
             color: var(--color-primary);
-          }
-
-          .nav-link.active::before {
-            display: none;
-          }
-
-          .nav-menu.open {
-            display: flex;
-          }
-
-          .nav-menu li {
             padding: var(--space-1) var(--space-4);
+          }
+
+          .nav-area.open {
+            display: flex;
           }
         }
       </style>
@@ -212,15 +211,17 @@ class AFHeader extends HTMLElement {
       <header class="site-header">
         <div class="site-header-bg"></div>
         <div class="header-inner">
-          <a href="${base}/" class="site-title">attention feed</a>
+          <div class="site-title">
+            ${titleHtml}
+          </div>
           <nav class="site-nav" aria-label="Main navigation">
-            <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu">
-              <span class="nav-toggle-label">${activeLabel}</span>
+            <button class="nav-toggle" aria-expanded="false">
+              <span class="nav-toggle-label">Menu</span>
               <span class="nav-toggle-arrow" aria-hidden="true">&#x25BE;</span>
             </button>
-            <ul id="nav-menu" class="nav-menu">
-              ${navLinks}
-            </ul>
+            <div class="nav-area">
+              <slot></slot>
+            </div>
           </nav>
         </div>
       </header>
@@ -229,16 +230,16 @@ class AFHeader extends HTMLElement {
 
   setupToggle() {
     const toggle = this.shadowRoot.querySelector('.nav-toggle');
-    const menu = this.shadowRoot.querySelector('.nav-menu');
+    const navArea = this.shadowRoot.querySelector('.nav-area');
 
     toggle?.addEventListener('click', () => {
-      const isOpen = menu?.classList.toggle('open');
+      const isOpen = navArea?.classList.toggle('open');
       toggle.setAttribute('aria-expanded', String(isOpen));
     });
 
     document.addEventListener('click', (e) => {
       if (!this.contains(e.target)) {
-        menu?.classList.remove('open');
+        navArea?.classList.remove('open');
         toggle?.setAttribute('aria-expanded', 'false');
       }
     });

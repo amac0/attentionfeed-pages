@@ -41,13 +41,16 @@ class AFHeader extends HTMLElement {
     const projectName = this.projectName;
     const projectUrl = this.projectUrl;
 
-    /* Build the title: "attention feed" alone, or "attention feed: ProjectName" */
-    let titleHtml = `<a href="${base}/" class="site-title-brand">attention feed</a>`;
+    /* Build the title: text "attention feed" on homepage, logo on subprojects */
+    let titleHtml;
     if (projectName) {
+      titleHtml = `<a href="${base}/" class="site-title-brand"><img src="${base}/shared/af-logo.svg" alt="attention feed" class="site-title-logo" /></a>`;
       const nameHtml = projectUrl
         ? `<a href="${projectUrl}" class="site-title-project">${projectName}</a>`
         : `<span class="site-title-project">${projectName}</span>`;
       titleHtml += `<span class="site-title-separator">:</span>${nameHtml}`;
+    } else {
+      titleHtml = `<a href="${base}/" class="site-title-brand">attention feed</a>`;
     }
 
     this.shadowRoot.innerHTML = `
@@ -109,6 +112,13 @@ class AFHeader extends HTMLElement {
           color: white;
           text-decoration: none;
           line-height: 1;
+        }
+
+        .site-title-logo {
+          height: 0.75em;
+          width: auto;
+          display: inline-block;
+          vertical-align: -0.18em;
         }
 
         .site-title-brand:hover,
@@ -326,6 +336,13 @@ class AFFooter extends HTMLElement {
           color: white;
         }
 
+        .footer-logo {
+          height: 1.2em;
+          width: auto;
+          display: inline-block;
+          vertical-align: -0.2em;
+        }
+
         .footer-links {
           text-transform: uppercase;
           letter-spacing: 0.08em;
@@ -348,7 +365,7 @@ class AFFooter extends HTMLElement {
 
       <footer class="site-footer">
         <div class="footer-inner">
-          <span class="footer-name">attention feed</span>
+          <span class="footer-name"><img src="${this.baseUrl}/shared/af-logo.svg" alt="attention feed" class="footer-logo" /></span>
           <span class="footer-links">
             <a href="${colophonUrl}">Colophon</a>
             <span class="separator">/</span>

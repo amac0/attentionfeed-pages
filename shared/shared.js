@@ -98,6 +98,7 @@ class AFHeader extends HTMLElement {
           align-items: baseline;
           gap: 0;
           line-height: 1;
+          white-space: nowrap;
         }
 
         .site-title-brand,

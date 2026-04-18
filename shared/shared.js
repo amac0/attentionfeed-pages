@@ -85,7 +85,6 @@ class AFHeader extends HTMLElement {
         .header-inner {
           position: relative;
           z-index: 1;
-          max-width: 1100px;
           margin: 0 auto;
           padding: var(--space-5) var(--space-5);
           display: flex;
@@ -313,7 +312,6 @@ class AFFooter extends HTMLElement {
         .footer-inner {
           position: relative;
           z-index: 1;
-          max-width: 1100px;
           margin: 0 auto;
           padding: var(--space-5) var(--space-5);
           display: flex;

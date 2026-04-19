@@ -374,16 +374,16 @@ class AFFooter extends HTMLElement {
         <div class="footer-inner">
           <span class="footer-left">
             <a href="#">Terms</a>
-            <span class="separator">/</span>
-            <a href="#">Privacy Policy</a>
+            <span class="separator">:</span>
+            <a href="#">Privacy</a>
           </span>
           <span class="footer-center">
             <img src="${this.baseUrl}/shared/af-logo.svg" alt="attention feed" class="footer-logo" />
           </span>
           <span class="footer-right">
             <a href="${colophonUrl}">Colophon</a>
-            <span class="separator">/</span>
-            <span>&copy; ${year}</span>
+            <span class="separator">:</span>
+            <span>Copyright ${year}</span>
           </span>
         </div>
       </footer>

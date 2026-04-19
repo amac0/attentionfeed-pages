@@ -115,10 +115,10 @@ class AFHeader extends HTMLElement {
         }
 
         .site-title-logo {
-          height: 0.7em;
+          height: 0.68em;
           width: auto;
           display: inline-block;
-          vertical-align: -0.15em;
+          vertical-align: -0.2em;
         }
 
         .site-title-brand:hover,

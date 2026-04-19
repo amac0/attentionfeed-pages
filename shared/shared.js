@@ -46,8 +46,8 @@ class AFHeader extends HTMLElement {
     if (projectName) {
       titleHtml = `<a href="${base}/" class="site-title-brand"><img src="${base}/shared/af-logo.svg" alt="attention feed" class="site-title-logo" /></a>`;
       const nameHtml = projectUrl
-        ? `<a href="${projectUrl}" class="site-title-project">${projectName}</a>`
-        : `<span class="site-title-project">${projectName}</span>`;
+        ? `<a href="${projectUrl}" class="site-title-project">${projectName.toLowerCase()}</a>`
+        : `<span class="site-title-project">${projectName.toLowerCase()}</span>`;
       titleHtml += `<span class="site-title-separator">:</span>${nameHtml}`;
     } else {
       titleHtml = `<a href="${base}/" class="site-title-brand">attention feed</a>`;

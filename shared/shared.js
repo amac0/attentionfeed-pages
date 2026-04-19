@@ -325,8 +325,9 @@ class AFFooter extends HTMLElement {
           margin: 0 auto;
           padding: var(--space-5) var(--space-5);
           display: flex;
-          justify-content: space-between;
+          flex-direction: column;
           align-items: center;
+          gap: var(--space-2);
         }
 
         .footer-name {
@@ -337,10 +338,9 @@ class AFFooter extends HTMLElement {
         }
 
         .footer-logo {
-          height: 1.2em;
+          height: 1.8em;
           width: auto;
-          display: inline-block;
-          vertical-align: -0.2em;
+          display: block;
         }
 
         .footer-links {

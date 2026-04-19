@@ -325,27 +325,33 @@ class AFFooter extends HTMLElement {
           margin: 0 auto;
           padding: var(--space-5) var(--space-5);
           display: flex;
-          flex-direction: column;
+          justify-content: space-between;
           align-items: center;
-          gap: var(--space-2);
         }
 
-        .footer-name {
-          font-family: 'Baloo 2', cursive;
-          font-weight: 700;
-          font-size: var(--text-base);
-          color: white;
+        .footer-left,
+        .footer-right {
+          flex: 1;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+
+        .footer-left {
+          text-align: left;
+        }
+
+        .footer-right {
+          text-align: right;
+        }
+
+        .footer-center {
+          flex: 0 0 auto;
         }
 
         .footer-logo {
           height: 1.8em;
           width: auto;
           display: block;
-        }
-
-        .footer-links {
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
         }
 
         .separator {
@@ -365,11 +371,18 @@ class AFFooter extends HTMLElement {
 
       <footer class="site-footer">
         <div class="footer-inner">
-          <span class="footer-name"><img src="${this.baseUrl}/shared/af-logo.svg" alt="attention feed" class="footer-logo" /></span>
-          <span class="footer-links">
+          <span class="footer-left">
+            <a href="#">Terms</a>
+            <span class="separator">/</span>
+            <a href="#">Privacy Policy</a>
+          </span>
+          <span class="footer-center">
+            <img src="${this.baseUrl}/shared/af-logo.svg" alt="attention feed" class="footer-logo" />
+          </span>
+          <span class="footer-right">
             <a href="${colophonUrl}">Colophon</a>
             <span class="separator">/</span>
-            <span>${year}</span>
+            <span>&copy; ${year}</span>
           </span>
         </div>
       </footer>

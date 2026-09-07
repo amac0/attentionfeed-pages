@@ -269,12 +269,27 @@ class AFFooter extends HTMLElement {
 
   connectedCallback() {
     this.render();
+    this.setupCookieChoices();
   }
 
   attributeChangedCallback() {
     if (this.shadowRoot.innerHTML) {
       this.render();
+      this.setupCookieChoices();
     }
+  }
+
+  // When the shared consent script is present, the Cookies link reopens the
+  // consent banner instead of navigating to the policy.
+  setupCookieChoices() {
+    const link = this.shadowRoot.querySelector('.cookie-choices');
+    if (!link) return;
+    link.addEventListener('click', (event) => {
+      if (window.afConsent) {
+        event.preventDefault();
+        window.afConsent.open();
+      }
+    });
   }
 
   get baseUrl() {
@@ -373,9 +388,11 @@ class AFFooter extends HTMLElement {
       <footer class="site-footer">
         <div class="footer-inner">
           <span class="footer-left">
-            <a href="#">Terms</a>
+            <a href="https://attentionfeed.com/terms/">Terms</a>
             <span class="separator">:</span>
-            <a href="#">Privacy</a>
+            <a href="https://attentionfeed.com/privacy/">Privacy</a>
+            <span class="separator">:</span>
+            <a href="https://attentionfeed.com/privacy/#4-cookies" class="cookie-choices">Cookies</a>
           </span>
           <span class="footer-center">
             <img src="${this.baseUrl}/shared/af-logo.svg" alt="attention feed" class="footer-logo" />

@@ -298,7 +298,7 @@ class AFFooter extends HTMLElement {
   }
 
   get colophonUrl() {
-    return this.getAttribute('colophon-url') || `${this.baseUrl}/colophon`;
+    return this.getAttribute('colophon-url') || `${this.baseUrl}/colophon/`;
   }
 
   render() {
